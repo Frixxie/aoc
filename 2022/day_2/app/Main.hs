@@ -4,15 +4,6 @@ import qualified Data.Maybe
 
 data RPS = Rock | Paper | Scissors deriving (Show)
 
--- newRPS :: String -> Maybe RPS
--- newRPS "A" = Just Rock
--- newRPS "B" = Just Paper
--- newRPS "C" = Just Scissors
--- newRPS "X" = Just Rock
--- newRPS "Y" = Just Paper
--- newRPS "Z" = Just Scissors
--- newRPS _ = Nothing
-
 calcGame :: RPS -> RPS -> Int
 calcGame Rock Scissors = 3
 calcGame Rock Paper = 8
