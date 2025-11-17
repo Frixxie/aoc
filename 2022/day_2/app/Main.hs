@@ -2,18 +2,33 @@ module Main (main) where
 
 import qualified Data.Maybe
 
+class ToValue a where
+  toValue :: a -> Int
+
 data RPS = Rock | Paper | Scissors deriving (Show)
 
+data Outcome = Win | Lose | Draw deriving (Show)
+
+instance ToValue RPS where
+  toValue Rock = 1
+  toValue Paper = 2
+  toValue Scissors = 3
+
+instance ToValue Outcome where
+  toValue Win = 6
+  toValue Draw = 3
+  toValue Lose = 0
+
 calcGame :: RPS -> RPS -> Int
-calcGame Rock Scissors = 3
-calcGame Rock Paper = 8
-calcGame Rock Rock = 4
-calcGame Paper Rock = 1
-calcGame Paper Scissors = 9
-calcGame Paper Paper = 5
-calcGame Scissors Paper = 2
-calcGame Scissors Rock = 7
-calcGame Scissors Scissors = 6
+calcGame Rock Scissors = toValue Scissors + toValue Lose
+calcGame Rock Paper = toValue Paper + toValue Win
+calcGame Rock Rock = toValue Rock + toValue Draw
+calcGame Paper Rock = toValue Rock + toValue Lose
+calcGame Paper Scissors = toValue Scissors + toValue Win
+calcGame Paper Paper = toValue Paper + toValue Draw
+calcGame Scissors Paper = toValue Paper + toValue Lose
+calcGame Scissors Rock = toValue Rock + toValue Win
+calcGame Scissors Scissors = toValue Scissors + toValue Draw
 
 interpretGame :: String -> Maybe (RPS, RPS)
 interpretGame "A X" = Just (Rock, Rock)
