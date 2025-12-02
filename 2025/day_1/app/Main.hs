@@ -5,9 +5,6 @@ data Operation = R Int | L Int deriving (Show)
 incCount :: Int -> Int -> Int
 incCount s c = if s == 0 then c + 1 else c
 
-incCount' :: Int -> Int -> Int -> Int
-incCount' s n c = if s == 0 then c + n else c
-
 applyOperation :: Operation -> Int -> Int -> (Int, Int)
 applyOperation (R n) s c =
   let res = (s + n) `mod` 100
@@ -15,6 +12,16 @@ applyOperation (R n) s c =
 applyOperation (L n) s c =
   let res = (s - n + 100) `mod` 100
    in (res, incCount res c)
+
+applyOperation' :: Operation -> Int -> Int -> (Int, Int)
+applyOperation' (R n) s c =
+  let res = (s + n) `mod` 100
+      r = (s + n) `div` 100
+   in (res, r + c)
+applyOperation' (L n) s c =
+  let res = (s - n + 100) `mod` 100
+      r = (n - s + 99) `div` 100
+   in (res, r + c)
 
 parseLine :: String -> Operation
 parseLine line =
@@ -33,3 +40,5 @@ main = do
   operations <- readInput "input.txt"
   let finalState = foldl (\(s, c) op -> applyOperation op s c) (50, 0) operations
   print finalState
+  let finalState' = foldl (\(s, c) op -> applyOperation' op s c) (50, 0) operations
+  print finalState'
