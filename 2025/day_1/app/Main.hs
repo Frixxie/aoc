@@ -1,18 +1,17 @@
 module Main (main) where
 
-import Data.Foldable
-
 data Operation = R Int | L Int deriving (Show)
 
-applyOperation :: Operation -> Int -> Int -> IO (Int, Int)
-applyOperation (R n) s c = do
+incCount :: Int -> Int -> Int
+incCount s c = if s == 0 then c + 1 else c
+
+applyOperation :: Operation -> Int -> Int -> (Int, Int)
+applyOperation (R n) s c =
   let res = (s + n) `mod` 100
-  print res
-  return (res, if res == 0 then c + 1 else c)
-applyOperation (L n) s c = do
+   in (res, incCount res c)
+applyOperation (L n) s c =
   let res = (s - n + 100) `mod` 100
-  print res
-  return (res, if res == 0 then c + 1 else c)
+   in (res, incCount res c)
 
 parseLine :: String -> Operation
 parseLine line =
@@ -29,6 +28,5 @@ readInput input = do
 main :: IO ()
 main = do
   operations <- readInput "input.txt"
-  print operations
-  finalState <- foldlM (\(s, c) op -> applyOperation op s c) (50, 0) operations
+  let finalState = foldl (\(s, c) op -> applyOperation op s c) (50, 0) operations
   print finalState
