@@ -5,6 +5,9 @@ data Operation = R Int | L Int deriving (Show)
 incCount :: Int -> Int -> Int
 incCount s c = if s == 0 then c + 1 else c
 
+incCount' :: Int -> Int -> Int -> Int
+incCount' s n c = if s == 0 then c + n else c
+
 applyOperation :: Operation -> Int -> Int -> (Int, Int)
 applyOperation (R n) s c =
   let res = (s + n) `mod` 100
